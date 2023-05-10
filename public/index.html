@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=600">
+        <title>Mood Tracker</title>
+        <style>
+            body {
+                background-color: #42619d;
+                font-family: "MS UI Gothic", sans-serif;
+                margin: 0;
+            }
+            .center {
+                text-align: center;
+            }
+            #dot {
+                position: absolute;
+                opacity: 0.7;
+            }
+            #moods, #dot {
+                user-select: none;
+                -moz-user-select: none;
+                -webkit-user-select: none;
+                -ms-user-select: none;
+                user-drag: none;
+                -webkit-user-drag: none;
+            }
+            #mood {
+                padding: 3px 6px;
+                margin: 0 auto;
+                margin-bottom: 5px;
+                display: block;
+                width: fit-content;
+            }
+            #bg {
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+                z-index: -1;
+            }
+            h1 {
+                margin: 0;
+                margin-top: 34px;
+                padding: 0;
+                font-size: 48px;
+                color: #fff;
+                text-shadow: 0 0 10px #000;
+            }
+            rect {
+                opacity: 0.6;
+            }
+            .selected {
+                opacity: 0.9;
+            }
+            #mainchart {
+                width: 90%;
+                height: 400px;
+                margin: 0 auto;
+                user-select: none;
+                background-color: white;
+                border-radius: 3px;
+                -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+            }
+            .heatmap-dot {
+                width: 16px;
+                height: 16px;
+                opacity: 0.5;
+
+            }
+            text, #mood {
+                display: none;
+            }
+            #offline {
+                position: fixed;
+                top: 5px;
+                left: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <span id="offline" hidden>Offline mode</span>
+        <img src="./moonclouds.webp" id="bg">
+        <div class="center">
+            <h1>Mood Tracker</h1>
+            <div>
+                <span style="transform: rotate(-90deg);display: block;position: relative;right: 270px;top: 266px;">Low Energy <----------------------> High Energy</span>
+                <img src="./reddot.png" alt="reddot" id="dot" width="24" height="24" draggable="false">
+                <svg version="1.1" width="518" height="518" xmlns="http://www.w3.org/2000/svg" alt="moods" id="moods" draggable="false">
+                    <rect x="2" y="2" width="84" height="84" fill="#9b0b00"/>
+                    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="44" y="44" data-name="Enraged">Enraged</text>
+                    <rect x="88" y="2" width="84" height="84" fill="#d72121"/>
+                    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="130" y="44" data-name="Stressed">Stressed</text>
+                    <rect x="174" y="2" width="84" height="84" fill="#e64f22"/>
+                    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="216" y="44" data-name="Shocked">Shocked</text>
+                    <rect x="260" y="2" width="84" height="84" fill="#ff914c"/>
+                    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="302" y="44" data-name="Manic">Manic</text>
+                    <rect x="346" y="2" width="84" height="84" fill="#febd59"/>
+                    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="388" y="44" data-name="Festive">Festive</text>
+                    <rect x="432" y="2" width="84" height="84" fill="#ffde59"/>
+                    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="474" y="44" data-name="Ecstatic">Ecstatic</text>
+                
+                    <rect x="2" y="88" width="84" height="84" fill="#9b0b00"/>
+                    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="42" y="130" data-name="Fuming">Fuming</text>
+                    <rect x="88" y="88" width="84" height="84" fill="#d72121"/>
+                    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="130" y="130" data-name="Angry">Angry</text>
+                    <rect x="174" y="88" width="84" height="84" fill="#e64f22"/>
+                    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="216" y="130" data-name="Restless">Restless</text>
+                    <rect x="260" y="88" width="84" height="84" fill="#ff914c"/>
+                    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="302" y="130" data-name="Energized">Energized</text>
+                    <rect x="346" y="88" width="84" height="84" fill="#febd59"/>
+                    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="389" y="130" data-name="Motivated">Motivated</text>
+                    <rect x="432" y="88" width="84" height="84" fill="#ffde59"/>
+                    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="474" y="130" data-name="Excited">Excited</text>
+                    
+                    <rect x="2" y="174" width="84" height="84" fill="#9b0b00"/>
+                    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="43" y="216" data-name="Anxious,">Anxious</text>
+                    <rect x="88" y="174" width="84" height="84" fill="#d72121"/>
+                    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="131" y="216" data-name="Worried">Worried</text>
+                    <rect x="174" y="174" width="84" height="84" fill="#e64f22"/>
+                    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="216" y="216" data-name="Uneasy">Uneasy</text>
+                    <rect x="260" y="174" width="84" height="84" fill="#ff914c"/>
+                    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="302" y="216" data-name="Pleasant">Pleasant</text>
+                    <rect x="346" y="174" width="84" height="84" fill="#febd59"/>
+                    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="388" y="216" data-name="Cheerful">Cheerful</text>
+                    <rect x="432" y="174" width="84" height="84" fill="#ffde59"/>
+                    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="474" y="216" data-name="Blissful">Blissful</text>
+                
+                    <rect x="2" y="260" width="84" height="84" fill="#668ea8"/>
+                    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="43" y="302" data-name="Anxious">Anxious</text>
+                    <rect x="88" y="260" width="84" height="84" fill="#85b3c8"/>
+                    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="130" y="302" data-name="Down">Down</text>
+                    <rect x="174" y="260" width="84" height="84" fill="#ccdde5"/>
+                    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="216" y="302" data-name="Apathetic">Apathetic</text>
+                    <rect x="260" y="260" width="84" height="84" fill="#c3d194"/>
+                    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="302" y="302" data-name="At ease">At ease</text>
+                    <rect x="346" y="260" width="84" height="84" fill="#a1ad7d"/>
+                    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="388" y="302" data-name="Content">Content</text>
+                    <rect x="432" y="260" width="84" height="84" fill="#6b7a41"/>
+                    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="474" y="302" data-name="Fulfilled">Fulfilled</text>
+                
+                    <rect x="2" y="346" width="84" height="84" fill="#668ea8"/>
+                    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="44" y="388" data-name="Miserable">Miserable</text>
+                    <rect x="88" y="346" width="84" height="84" fill="#85b3c8"/>
+                    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="130" y="388" data-name="Sad">Sad</text>
+                    <rect x="174" y="346" width="84" height="84" fill="#ccdde5"/>
+                    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="216" y="388" data-name="Tired">Tired</text>
+                    <rect x="260" y="346" width="84" height="84" fill="#c3d194"/>
+                    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="302" y="388" data-name="Relaxed">Relaxed</text>
+                    <rect x="346" y="346" width="84" height="84" fill="#a1ad7d"/>
+                    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="388" y="388" data-name="Restful">Restful</text>
+                    <rect x="432" y="346" width="84" height="84" fill="#6b7a41"/>
+                    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="474" y="388" data-name="Satisfied">Satisfied</text>
+                
+                    <rect x="2" y="432" width="84" height="84" fill="#668ea8"/>
+                    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="42" y="474" data-name="Despair">Despair</text>
+                    <rect x="88" y="432" width="84" height="84" fill="#85b3c8"/>
+                    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="130" y="474" data-name="Desolate">Desolate</text>
+                    <rect x="174" y="432" width="84" height="84" fill="#ccdde5"/>
+                    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="216" y="474" data-name="Drained">Drained</text>
+                    <rect x="260" y="432" width="84" height="84" fill="#c3d194"/>
+                    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="302" y="474" data-name="Sleepy">Sleepy</text>
+                    <rect x="346" y="432" width="84" height="84" fill="#a1ad7d"/>
+                    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="388" y="474" data-name="Tranquil">Tranquil</text>
+                    <rect x="432" y="432" width="84" height="84" fill="#6b7a41"/>
+                    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="474" y="474" data-name="Serene">Serene</text>
+                </svg>
+                <br>
+                <span>Unpleasant <----------------------> Pleasant</span>
+                <br>
+                <br>
+                <span id="mood">Unknown</span>
+                <span>Pleasantness: <span id="pleasantness">0.00</span></span>
+                <br>
+                <span>Energy: <span id="energy">0.00</span></span>
+                <br>
+                <span>Updated: <span id="date">2023-05-01 12:00:00</span></span>
+                <br>
+                <a href="https://github.com/dimdenGD/mood-tracker" target="_blank" style="font-size:12px">Github</a>
+            </div>
+            <br>
+            <details>
+                <summary>Analytics</summary>
+                <br>
+                Since: <input type="date" id="after" value="2023-05-04">
+                <br><br>
+                <div>
+                    <div id="mainchart-div">
+                        <h2>Main chart</h2>
+                        Average: <input id="sma" type="number" value="1" min="1" style="width:25px">
+                        <br><br>
+                        <div id="mainchart"></div>
+                    </div>
+                    <br>
+                    <br>
+                    <div id="heatmap">
+                        <h2>Heatmap</h2>
+                        <div id="heatmap-dots" style="margin-left:-512px"></div>
+                        <img src="./moods.svg" width="518" height="518">
+                    </div>
+                    <br><br><br><br><br><br>
+                </div>
+            </details>
+        </div>
+        <script>
+            if('serviceWorker' in navigator) {
+                let registration;
+
+                const registerServiceWorker = async () => {
+                    registration = await navigator.serviceWorker.register('./sw.js');
+                };
+
+                registerServiceWorker();
+            }
+            let moods = document.getElementById("moods");
+            let dot = document.getElementById("dot");
+            let rects = moods.getElementsByTagName("rect");
+
+            function setCoords(pleasantness, energy, gray) {
+                let x = (pleasantness + 1) * 262;
+                let y = (energy + 1) * 262;
+                y = 518 - y;
+
+                dot.style.marginLeft = x-12 + "px";
+                dot.style.marginTop = y-12 + "px";
+
+                document.getElementById("pleasantness").innerText = pleasantness.toFixed(2);
+                document.getElementById("energy").innerText = energy.toFixed(2);
+                let [text, color] = getMoodInfo(pleasantness, energy);
+                document.getElementById("mood").innerText = text;
+                document.getElementById("mood").style.backgroundColor = "#" + color;
+                if(gray) dot.style.filter = "grayscale(0.4)";
+                else dot.style.filter = "";
+
+                for(let rect of rects) {
+                    rect.className.baseVal = "";
+                }
+                let rect = document.querySelector(`text[data-name="${text}"]`);
+                if(rect) rect.previousElementSibling.className.baseVal = "selected";
+            }
+            let lastPleasantness = 0;
+            let lastEnergy = 0;
+            setCoords(lastPleasantness, lastEnergy, true);
+
+            function update(e) {
+                if(!localStorage.admin) return;
+                let rect = moods.getBoundingClientRect();
+                let x = e.clientX - rect.left;
+                let y = e.clientY - rect.top;
+                y = 518 - y;
+                lastPleasantness = +((x / 518) * 2 - 1).toFixed(2);
+                lastEnergy = (+((y / 518) * 2 - 1).toFixed(2));
+                setCoords(lastPleasantness, lastEnergy, true);
+            }
+            let offline = false;
+            function sync(doGet = true) {
+                offline = false;
+                if(localStorage.toSend && localStorage.admin) {
+                    let toSend = [];
+                    try {
+                        toSend = JSON.parse(localStorage.toSend);
+                    } catch(e) {
+                        return alert("Error parsing data: " + e);
+                    }
+                    fetch("/services/mood/setmultiple", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            moods: toSend,
+                            pass: localStorage.admin
+                        })
+                    }).then(res => res.text()).then(res => {
+                        if(res === 'added') {
+                            document.getElementById('offline').hidden = false;
+                            document.getElementById('offline').innerText = `Sent ${toSend.length} moods`;
+                            setTimeout(() => {
+                                document.getElementById('offline').hidden = true;
+                                document.getElementById('offline').innerText = `Offline`;
+                            }, 3000);
+                            delete localStorage.toSend;
+                            if(doGet) {
+                                get();
+                                if(window.updateData) updateData(new Date(document.getElementById('after').value).getTime());
+                            }
+                        }
+                    })
+                } else {
+                    document.getElementById('offline').hidden = true;
+                }
+            }
+            function get() {
+                fetch("/services/mood/get").then(res => res.json()).then(res => {
+                    if(offline || localStorage.toSend) {
+                        return sync();
+                    }
+                    if(res.error) {
+                        return alert("Error getting data: " + res.error);
+                    }
+                    lastPleasantness = res.pleasantness;
+                    lastEnergy = res.energy;
+                    setCoords(lastPleasantness, lastEnergy, false);
+                    localStorage.lastCachedMood = JSON.stringify(res);
+                    document.getElementById('date').innerText = new Date(res.timestamp).toLocaleString();
+                }).catch(e => {
+                    offline = true;
+                    document.getElementById('offline').hidden = false;
+                    if(localStorage.toSend) {
+                        let toSend = [];
+                        try {
+                            toSend = JSON.parse(localStorage.toSend);
+                        } catch(e) {
+                            toSend = [];
+                        }
+
+                        let lastMood = toSend[toSend.length - 1];
+                        if(lastMood) {
+                            lastPleasantness = lastMood.pleasantness;
+                            lastEnergy = lastMood.energy;
+                            setCoords(lastPleasantness, lastEnergy, false);
+                            document.getElementById('date').innerText = new Date(lastMood.timestamp).toLocaleString();
+                        }
+                    } else if(localStorage.lastCachedMood) {
+                        let lastMood = JSON.parse(localStorage.lastCachedMood);
+                        lastPleasantness = lastMood.pleasantness;
+                        lastEnergy = lastMood.energy;
+                        setCoords(lastPleasantness, lastEnergy, false);
+                        document.getElementById('date').innerText = new Date(lastMood.timestamp).toLocaleString();
+                    }
+                });
+            }
+            get();
+            setInterval(get, 1000 * 60);
+            function send() {
+                if(!localStorage.admin) return;
+                fetch("/services/mood/set", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        pleasantness: lastPleasantness,
+                        energy: lastEnergy,
+                        pass: localStorage.admin
+                    })
+                }).then(res => res.text()).then(res => {
+                    if(res !== 'added' && res !== 'edited') {
+                        return alert("Error: " + res);
+                    }
+                    if(offline || localStorage.toSend) {
+                        sync(false);
+                    }
+                    dot.style.filter = `hue-rotate(${res === 'added' ? '132' : '209'}deg)`;
+                    if(res === 'added') document.getElementById('date').innerText = new Date().toLocaleString();
+
+                    localStorage.lastCachedMood = JSON.stringify({
+                        pleasantness: lastPleasantness,
+                        energy: lastEnergy,
+                        timestamp: Date.now()
+                    });
+
+                    if(window.updateData) updateData(new Date(document.getElementById('after').value).getTime());
+                    setTimeout(() => {
+                        dot.style.filter = "";
+                    }, 1000);
+                }).catch(e => {
+                    let toSend = [];
+                    try {
+                        toSend = JSON.parse(localStorage.toSend);
+                    } catch(e) {
+                        toSend = [];
+                    }
+
+                    let lastMood = toSend[toSend.length - 1];
+                    if(lastMood && Date.now() - lastMood.timestamp < 60000) {
+                        lastMood.pleasantness = lastPleasantness;
+                        lastMood.energy = lastEnergy;
+                        dot.style.filter = `hue-rotate(209deg)`;
+                    } else {
+                        toSend.push({
+                            pleasantness: lastPleasantness,
+                            energy: lastEnergy,
+                            timestamp: Date.now()
+                        });
+                        dot.style.filter = `hue-rotate(132deg)`;
+                        document.getElementById('date').innerText = new Date().toLocaleString();
+                    }
+                    setTimeout(() => {
+                        dot.style.filter = "";
+                    }, 1000);
+                    localStorage.toSend = JSON.stringify(toSend);
+                })
+            }
+            function getMoodInfo(pleasantness, energy) {
+                if(energy >= 0.67) {
+                    if(pleasantness >= 0.67) {
+                        return ["Ecstatic", "ffde59"];
+                    } else if(pleasantness >= 0.33) {
+                        return ["Festive", "febd59"];
+                    } else if(pleasantness >= 0) {
+                        return ["Manic", "ff914c"];
+                    } else if(pleasantness >= -0.33) {
+                        return ["Shocked", "e64f22"];
+                    } else if(pleasantness >= -0.67) {
+                        return ["Stressed", "d72121"];
+                    } else {
+                        return ["Enraged", "9b0b00"];
+                    }
+                } else if(energy >= 0.33) {
+                    if(pleasantness >= 0.67) {
+                        return ["Excited", "ffde59"];
+                    } else if(pleasantness >= 0.33) {
+                        return ["Motivated", "febd59"];
+                    } else if(pleasantness >= 0) {
+                        return ["Energized", "ff914c"];
+                    } else if(pleasantness >= -0.33) {
+                        return ["Restless", "e64f22"];
+                    } else if(pleasantness >= -0.67) {
+                        return ["Angry", "d72121"];
+                    } else {
+                        return ["Fuming", "9b0b00"];
+                    }
+                } else if(energy >= 0) {
+                    if(pleasantness >= 0.67) {
+                        return ["Blissful", "ffde59"];
+                    } else if(pleasantness >= 0.33) {
+                        return ["Cheerful", "febd59"];
+                    } else if(pleasantness >= 0) {
+                        return ["Pleasant", "ff914c"];
+                    } else if(pleasantness >= -0.33) {
+                        return ["Uneasy", "e64f22"];
+                    } else if(pleasantness >= -0.67) {
+                        return ["Worried", "d72121"];
+                    } else {
+                        return ["Anxious,", "9b0b00"];
+                    }
+                } else if(energy >= -0.33) {
+                    if(pleasantness >= 0.67) {
+                        return ["Fulfilled", "6b7a41"];
+                    } else if(pleasantness >= 0.33) {
+                        return ["Content", "a1ad7e"];
+                    } else if(pleasantness >= 0) {
+                        return ["At ease", "c3d098"];
+                    } else if(pleasantness >= -0.33) {
+                        return ["Apathetic", "d1dae6"];
+                    } else if(pleasantness >= -0.67) {
+                        return ["Down", "89b1cb"];
+                    } else {
+                        return ["Anxious", "688ca9"];
+                    }
+                } else if(energy >= -0.67) {
+                    if(pleasantness >= 0.67) {
+                        return ["Satisfied", "6b7a41"];
+                    } else if(pleasantness >= 0.33) {
+                        return ["Restful", "a1ad7e"];
+                    } else if(pleasantness >= 0) {
+                        return ["Relaxed", "c3d098"];
+                    } else if(pleasantness >= -0.33) {
+                        return ["Tired", "d1dae6"];
+                    } else if(pleasantness >= -0.67) {
+                        return ["Sad", "89b1cb"];
+                    } else {
+                        return ["Miserable", "688ca9"];
+                    }
+                } else {
+                    if(pleasantness >= 0.67) {
+                        return ["Serene", "6b7a41"];
+                    } else if(pleasantness >= 0.33) {
+                        return ["Tranquil", "a1ad7e"];
+                    } else if(pleasantness >= 0) {
+                        return ["Sleepy", "c3d098"];
+                    } else if(pleasantness >= -0.33) {
+                        return ["Drained", "d1dae6"];
+                    } else if(pleasantness >= -0.67) {
+                        return ["Desolate", "89b1cb"];
+                    } else {
+                        return ["Despair", "688ca9"];
+                    }
+                }
+                return ["Unknown", "ffffff"];
+            }
+
+            moods.addEventListener("click", update);
+            let dragging = false;
+            dot.addEventListener("mousedown", e => {
+                dragging = true;
+            });
+            dot.addEventListener("touchstart", e => {
+                dragging = true;
+            });
+            moods.addEventListener("mousemove", e => {
+                if(!dragging) return;
+                update(e);
+            });
+            moods.addEventListener("touchmove", e => {
+                if(!dragging) return;
+                update(e.touches[0]);
+            });
+            window.addEventListener("mouseup", e => {
+                dragging = false;
+            });
+            window.addEventListener("touchend", e => {
+                dragging = false;
+            });
+            function isMobile() {
+                var match = window.matchMedia || window.msMatchMedia;
+                if (match) {
+                    var mq = match("(pointer:coarse)");
+                    return mq.matches;
+                }
+                return false;
+                }
+            var mobile = isMobile();
+            dot.addEventListener("contextmenu", e => {
+                e.preventDefault();
+                console.log("pleasant: " + lastPleasantness + ", energy: " + lastEnergy);
+                send();
+            });
+            if(mobile) moods.addEventListener("contextmenu", e => {
+                e.preventDefault();
+                console.log("pleasant: " + lastPleasantness + ", energy: " + lastEnergy);
+                send();
+            });
+        </script>
+        <script src="./echarts.min.js"></script>
+        <script>
+            let lastMoods = [];
+            const mood_epoch = 1682726400 * 1000;
+            const dateInput = document.getElementById("after");
+            const heatmapDots = document.getElementById("heatmap-dots");
+            dateInput.value = new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString().split("T")[0];
+            dateInput.addEventListener("change", e => {
+                updateData(new Date(e.target.value).getTime());
+            });
+            const smaElement = document.getElementById("sma");
+            smaElement.addEventListener("change", e => {
+                setMainChart(getSMA(lastMoods));
+            });
+
+            function getSMA(data) {
+                const smaNumber = +smaElement.value;
+                if(smaNumber <= 1) return data;
+                const sma = [];
+
+                for(let i = 0; i < data.length; i++) {
+                    let sum = [0, 0];
+                    let count = 0;
+                    for(let j = i; j < i + smaNumber && j < data.length; j++) {
+                        sum[0] += data[j][0];
+                        sum[1] += data[j][1];
+                        count++;
+                    }
+                    sma.push([sum[0] / count, sum[1] / count, data[i][2]]);
+                }
+
+                return sma;
+            }
+
+            function setMainChart(data) {
+                const mainchart = echarts.init(document.getElementById('mainchart'));
+
+                mainchart.setOption({
+                    xAxis: {
+                        type: 'time',
+                        data: data.map(i => i[2])
+                    },
+                    tooltip: {
+                        trigger: 'item'
+                    },
+                    legend: {
+                        data: ['Pleaseantness', 'Energy']
+                    },
+                    yAxis: {
+                        type: 'value',
+                        min: -1,
+                        max: 1
+                    },
+                    series: [
+                        {
+                            name: 'Pleaseantness',
+                            data: data.map(i => [i[2], i[0]]),
+                            type: 'line',
+                            smooth: true,
+                        },
+                        {
+                            name: 'Energy',
+                            data: data.map(i => [i[2], i[1]]),
+                            type: 'line',
+                            smooth: true,
+                        },
+                    ]
+                });
+                mainchart.resize({
+                    width: innerWidth * 0.9,
+                    height: 400
+                });
+            }
+
+            function setHeatmap(data) {
+                heatmapDots.innerHTML = "";
+                for(let mood of data) {
+                    let img = document.createElement("img");
+                    img.src = "./reddot.png";
+                    img.style.position = "absolute";
+                    
+                    let x = (mood[0] + 1) * 262;
+                    let y = (mood[1] + 1) * 262;
+                    y = 518 - y;
+
+                    img.className = 'heatmap-dot';
+                    img.style.marginLeft = x-8 + "px";
+                    img.style.marginTop = y-8 + "px";
+                    img.title = mood[2].toLocaleString();
+
+                    heatmapDots.appendChild(img);
+                }
+            }
+
+            function updateData(after) {
+                fetch("/services/mood/file.mood?after="+after).then(i => i.arrayBuffer()).then(data => {
+                    let dv = new DataView(data);
+                    let moods = [];
+                    for(let i = 0; i < data.byteLength; i += 6) {
+                        moods.unshift([dv.getInt8(i) / 100, dv.getInt8(i + 1) / 100, new Date(mood_epoch + dv.getUint32(i + 2)*1000)]);
+                    }
+                    lastMoods = moods;
+
+                    setMainChart(getSMA(moods));
+                    setHeatmap(moods);
+                });
+            }
+            updateData(new Date(dateInput.value).getTime());
+        </script>
+    </body>
+</html>

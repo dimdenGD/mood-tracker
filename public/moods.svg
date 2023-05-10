@@ -1,0 +1,79 @@
+<svg version="1.1" width="518" height="518" xmlns="http://www.w3.org/2000/svg">
+    <rect x="2" y="2" width="84" height="84" fill="#9b0b00"/>
+    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="44" y="44" data-name="Enraged">Enraged</text>
+    <rect x="88" y="2" width="84" height="84" fill="#d72121"/>
+    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="130" y="44" data-name="Stressed">Stressed</text>
+    <rect x="174" y="2" width="84" height="84" fill="#e64f22"/>
+    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="216" y="44" data-name="Shocked">Shocked</text>
+    <rect x="260" y="2" width="84" height="84" fill="#ff914c"/>
+    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="302" y="44" data-name="Manic">Manic</text>
+    <rect x="346" y="2" width="84" height="84" fill="#febd59"/>
+    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="388" y="44" data-name="Festive">Festive</text>
+    <rect x="432" y="2" width="84" height="84" fill="#ffde59"/>
+    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="474" y="44" data-name="Ecstatic">Ecstatic</text>
+
+    <rect x="2" y="88" width="84" height="84" fill="#9b0b00"/>
+    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="42" y="130" data-name="Fuming">Fuming</text>
+    <rect x="88" y="88" width="84" height="84" fill="#d72121"/>
+    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="130" y="130" data-name="Angry">Angry</text>
+    <rect x="174" y="88" width="84" height="84" fill="#e64f22"/>
+    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="216" y="130" data-name="Restless">Restless</text>
+    <rect x="260" y="88" width="84" height="84" fill="#ff914c"/>
+    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="302" y="130" data-name="Energized">Energized</text>
+    <rect x="346" y="88" width="84" height="84" fill="#febd59"/>
+    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="389" y="130" data-name="Motivated">Motivated</text>
+    <rect x="432" y="88" width="84" height="84" fill="#ffde59"/>
+    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="474" y="130" data-name="Excited">Excited</text>
+    
+    <rect x="2" y="174" width="84" height="84" fill="#9b0b00"/>
+    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="43" y="216" data-name="Anxious">Anxious</text>
+    <rect x="88" y="174" width="84" height="84" fill="#d72121"/>
+    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="131" y="216" data-name="Worried">Worried</text>
+    <rect x="174" y="174" width="84" height="84" fill="#e64f22"/>
+    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="216" y="216" data-name="Uneasy">Uneasy</text>
+    <rect x="260" y="174" width="84" height="84" fill="#ff914c"/>
+    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="302" y="216" data-name="Pleasant">Pleasant</text>
+    <rect x="346" y="174" width="84" height="84" fill="#febd59"/>
+    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="388" y="216" data-name="Cheerful">Cheerful</text>
+    <rect x="432" y="174" width="84" height="84" fill="#ffde59"/>
+    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="474" y="216" data-name="Blissful">Blissful</text>
+
+    <rect x="2" y="260" width="84" height="84" fill="#668ea8"/>
+    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="43" y="302" data-name="Anxious">Anxious</text>
+    <rect x="88" y="260" width="84" height="84" fill="#85b3c8"/>
+    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="130" y="302" data-name="Down">Down</text>
+    <rect x="174" y="260" width="84" height="84" fill="#ccdde5"/>
+    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="216" y="302" data-name="Apathetic">Apathetic</text>
+    <rect x="260" y="260" width="84" height="84" fill="#c3d194"/>
+    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="302" y="302" data-name="At ease">At ease</text>
+    <rect x="346" y="260" width="84" height="84" fill="#a1ad7d"/>
+    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="388" y="302" data-name="Content">Content</text>
+    <rect x="432" y="260" width="84" height="84" fill="#6b7a41"/>
+    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="474" y="302" data-name="Fulfilled">Fulfilled</text>
+
+    <rect x="2" y="346" width="84" height="84" fill="#668ea8"/>
+    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="44" y="388" data-name="Miserable">Miserable</text>
+    <rect x="88" y="346" width="84" height="84" fill="#85b3c8"/>
+    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="130" y="388" data-name="Sad">Sad</text>
+    <rect x="174" y="346" width="84" height="84" fill="#ccdde5"/>
+    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="216" y="388" data-name="Tired">Tired</text>
+    <rect x="260" y="346" width="84" height="84" fill="#c3d194"/>
+    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="302" y="388" data-name="Relaxed">Relaxed</text>
+    <rect x="346" y="346" width="84" height="84" fill="#a1ad7d"/>
+    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="388" y="388" data-name="Restful">Restful</text>
+    <rect x="432" y="346" width="84" height="84" fill="#6b7a41"/>
+    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="474" y="388" data-name="Satisfied">Satisfied</text>
+
+    <rect x="2" y="432" width="84" height="84" fill="#668ea8"/>
+    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="42" y="474" data-name="Despair">Despair</text>
+    <rect x="88" y="432" width="84" height="84" fill="#85b3c8"/>
+    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="130" y="474" data-name="Desolate">Desolate</text>
+    <rect x="174" y="432" width="84" height="84" fill="#ccdde5"/>
+    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="216" y="474" data-name="Drained">Drained</text>
+    <rect x="260" y="432" width="84" height="84" fill="#c3d194"/>
+    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="302" y="474" data-name="Sleepy">Sleepy</text>
+    <rect x="346" y="432" width="84" height="84" fill="#a1ad7d"/>
+    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="388" y="474" data-name="Tranquil">Tranquil</text>
+    <rect x="432" y="432" width="84" height="84" fill="#6b7a41"/>
+    <text font-family="MS UI Gothic" font-weight="bold" text-anchor="middle" dominant-baseline="middle" x="474" y="474" data-name="Serene">Serene</text>
+</svg>
