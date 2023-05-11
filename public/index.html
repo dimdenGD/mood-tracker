@@ -53,7 +53,7 @@
             .selected {
                 opacity: 0.9;
             }
-            #mainchart {
+            .chart {
                 width: 90%;
                 height: 400px;
                 margin: 0 auto;
@@ -75,6 +75,10 @@
                 position: fixed;
                 top: 5px;
                 left: 5px;
+            }
+            .square-chart {
+                max-width: 600px;
+                height: 600px;
             }
         </style>
     </head>
@@ -189,7 +193,7 @@
                         <h2>Main chart</h2>
                         Average: <input id="sma" type="number" value="1" min="1" style="width:25px">
                         <br><br>
-                        <div id="mainchart"></div>
+                        <div id="mainchart" class="chart"></div>
                     </div>
                     <br>
                     <br>
@@ -197,6 +201,18 @@
                         <h2>Heatmap</h2>
                         <div id="heatmap-dots" style="margin-left:-512px"></div>
                         <img src="./moods.svg" width="518" height="518">
+                    </div>
+                    <br>
+                    <br>
+                    <div id="hourly-average-energy-div">
+                        <h2>Hourly average energy</h2>
+                        <div id="hourly-average-energy" class="chart square-chart"></div>
+                    </div>
+                    <br>
+                    <br>
+                    <div id="hourly-average-pleasantness-div">
+                        <h2>Hourly average pleasantness</h2>
+                        <div id="hourly-average-pleasantness" class="chart square-chart"></div>
                     </div>
                     <br><br><br><br><br><br>
                 </div>
@@ -597,6 +613,118 @@
                 });
             }
 
+            function setHourlyEnergyChart(d) {
+                const chart = echarts.init(document.getElementById('hourly-average-energy'));
+
+                const data = [];
+                for (let i = d.length - 1; i >= 0; i--) data.push(d[i]);
+                let values = new Array(24).fill(0);
+                let startDate = data[data.length - 1][2].getTime();
+                let endDate = data[0][2].getTime();
+                let c = 0;
+                // iterate through every 5 minutes finding the closest mood
+                for(let d = startDate; d < endDate; d += 1000 * 60 * 5, c++) {
+                    let closest = data[0];
+                    for(let mood of data) {
+                        if(Math.abs(mood[2].getTime() - d) < Math.abs(closest[2].getTime() - d)) {
+                            closest = mood;
+                        }
+                    }
+                    values[closest[2].getHours()] += closest[1];
+                }
+                for(let i = 0; i < values.length; i++) {
+                    values[i] /= c;
+                }
+                let min = Math.min(...values);
+                let max = Math.max(...values);
+                let m = Math.max(Math.abs(min), Math.abs(max));
+
+
+                chart.setOption({
+                    polar: {
+                        radius: [30, '80%']
+                    },
+                    radiusAxis: {
+                        max: +(m * 1.1).toFixed(2),
+                        min: +(-m * 1.1).toFixed(2),
+                    },
+                    angleAxis: {
+                        type: 'category',
+                        data: [
+                            '00', '01', '02', '03', '04', '05', '06', '07', '08', '09',
+                            '10', '11', '12', '13', '14', '15', '16', '17', '18', '19',
+                            '20', '21', '22', '23'
+                        ],
+                    },
+                    series: {
+                        type: 'bar',
+                        data: values,
+                        coordinateSystem: 'polar'
+                    },
+                    animation: false
+                });
+                chart.resize({
+                    width: innerWidth > 600 ? 600 : innerWidth * 0.9,
+                    height: 600
+                });
+            }
+
+            function setHourlyPleasantnessChart(d) {
+                const chart = echarts.init(document.getElementById('hourly-average-pleasantness'));
+
+                const data = [];
+                for (let i = d.length - 1; i >= 0; i--) data.push(d[i]);
+                let values = new Array(24).fill(0);
+                let startDate = data[data.length - 1][2].getTime();
+                let endDate = data[0][2].getTime();
+                let c = 0;
+                // iterate through every 5 minutes finding the closest mood
+                for(let d = startDate; d < endDate; d += 1000 * 60 * 5, c++) {
+                    let closest = data[0];
+                    for(let mood of data) {
+                        if(Math.abs(mood[2].getTime() - d) < Math.abs(closest[2].getTime() - d)) {
+                            closest = mood;
+                        }
+                    }
+                    values[closest[2].getHours()] += closest[0];
+                }
+                for(let i = 0; i < values.length; i++) {
+                    values[i] /= c;
+                }
+                let min = Math.min(...values);
+                let max = Math.max(...values);
+                let m = Math.max(Math.abs(min), Math.abs(max));
+
+
+                chart.setOption({
+                    polar: {
+                        radius: [30, '80%']
+                    },
+                    radiusAxis: {
+                        max: +(m * 1.1).toFixed(2),
+                        min: +(-m * 1.1).toFixed(2),
+                    },
+                    angleAxis: {
+                        type: 'category',
+                        data: [
+                            '00', '01', '02', '03', '04', '05', '06', '07', '08', '09',
+                            '10', '11', '12', '13', '14', '15', '16', '17', '18', '19',
+                            '20', '21', '22', '23'
+                        ],
+                    },
+                    series: {
+                        type: 'bar',
+                        data: values,
+                        coordinateSystem: 'polar'
+                    },
+                    animation: false
+                });
+                chart.resize({
+                    width: innerWidth > 600 ? 600 : innerWidth * 0.9,
+                    height: 600
+                });
+            }
+
             function setHeatmap(data) {
                 heatmapDots.innerHTML = "";
                 for(let mood of data) {
@@ -628,6 +756,8 @@
 
                     setMainChart(getSMA(moods));
                     setHeatmap(moods);
+                    setHourlyEnergyChart(moods);
+                    setHourlyPleasantnessChart(moods);
                 });
             }
             updateData(new Date(dateInput.value).getTime());
