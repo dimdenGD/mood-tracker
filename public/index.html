@@ -77,8 +77,17 @@
                 left: 5px;
             }
             .square-chart {
-                max-width: 600px;
+                max-width: 700px;
                 height: 600px;
+            }
+            #hourlies {
+                display: flex;
+                place-content: center;
+            }
+            @media screen and (max-width: 1450px) {
+                #hourlies {
+                    display: block;
+                }
             }
         </style>
     </head>
@@ -204,15 +213,15 @@
                     </div>
                     <br>
                     <br>
-                    <div id="hourly-average-energy-div">
-                        <h2>Hourly average energy</h2>
-                        <div id="hourly-average-energy" class="chart square-chart"></div>
-                    </div>
-                    <br>
-                    <br>
-                    <div id="hourly-average-pleasantness-div">
-                        <h2>Hourly average pleasantness</h2>
-                        <div id="hourly-average-pleasantness" class="chart square-chart"></div>
+                    <div id="hourlies">
+                        <div id="hourly-average-energy-div">
+                            <h2>Hourly average energy</h2>
+                            <div id="hourly-average-energy" class="chart square-chart"></div>
+                        </div>
+                        <div id="hourly-average-pleasantness-div">
+                            <h2>Hourly average pleasantness</h2>
+                            <div id="hourly-average-pleasantness" class="chart square-chart"></div>
+                        </div>
                     </div>
                     <br><br><br><br><br><br>
                 </div>
@@ -630,7 +639,7 @@
                             closest = mood;
                         }
                     }
-                    values[closest[2].getHours()] += closest[1];
+                    values[new Date(d).getHours()] += closest[1];
                 }
                 for(let i = 0; i < values.length; i++) {
                     values[i] /= c;
@@ -664,7 +673,7 @@
                     animation: false
                 });
                 chart.resize({
-                    width: innerWidth > 600 ? 600 : innerWidth * 0.9,
+                    width: innerWidth > 700 ? 700 : innerWidth * 0.9,
                     height: 600
                 });
             }
@@ -686,7 +695,7 @@
                             closest = mood;
                         }
                     }
-                    values[closest[2].getHours()] += closest[0];
+                    values[new Date(d).getHours()] += closest[0];
                 }
                 for(let i = 0; i < values.length; i++) {
                     values[i] /= c;
@@ -720,7 +729,7 @@
                     animation: false
                 });
                 chart.resize({
-                    width: innerWidth > 600 ? 600 : innerWidth * 0.9,
+                    width: innerWidth > 700 ? 700 : innerWidth * 0.9,
                     height: 600
                 });
             }
