@@ -584,7 +584,7 @@
                         sum[1] += data[j][1];
                         count++;
                     }
-                    sma.push([sum[0] / count, sum[1] / count, data[i][2]]);
+                    sma.push([+(sum[0] / count).toFixed(4), +(sum[1] / count).toFixed(4), data[i][2]]);
                 }
 
                 return sma;
@@ -622,14 +622,17 @@
                             data: data.map(i => [i[2], i[0]]),
                             type: 'line',
                             smooth: true,
+                            showSymbol: data.length < 500,
                         },
                         {
                             name: 'Energy',
                             data: data.map(i => [i[2], i[1]]),
                             type: 'line',
                             smooth: true,
+                            showSymbol: data.length < 500,
                         },
-                    ]
+                    ],
+                    animation: data.length < 500
                 });
                 mainchart.resize({
                     width: innerWidth * 0.9,
