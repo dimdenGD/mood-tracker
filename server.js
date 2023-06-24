@@ -77,4 +77,6 @@ app.post('/services/mood/setmultiple', bodyParser.json(), (req, res) => {
 
 app.use('/mood', express.static(path.join(__dirname, "public")));
 
+console.log("Mood service started.");
+
 module.exports = app;

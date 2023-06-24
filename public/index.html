@@ -363,6 +363,13 @@
                     }
                 });
             }
+            if(localStorage.lastCachedMood) {
+                let lastMood = JSON.parse(localStorage.lastCachedMood);
+                lastPleasantness = lastMood.pleasantness;
+                lastEnergy = lastMood.energy;
+                setCoords(lastPleasantness, lastEnergy, false);
+                document.getElementById('date').innerText = new Date(lastMood.timestamp).toLocaleString();
+            }
             get();
             setInterval(get, 1000 * 60);
             function send() {
@@ -770,12 +777,13 @@
                             closest = mood;
                         }
                     }
+                    if(closest[2].getHours() >= 4 && closest[2].getHours() <= 9) continue;
                     if(!values[new Date(d).toISOString().split("T")[0]]) values[new Date(d).toISOString().split("T")[0]] = 0;
                     values[new Date(d).toISOString().split("T")[0]] += closest[0];
                 }
                 for(let i in values) {
                     values[i] /= c;
-                    values[i] = +values[i].toFixed(3) * 10;
+                    values[i] = +values[i].toFixed(4) * 10;
                 }
                 let min, max;
                 for(let i in values) {
