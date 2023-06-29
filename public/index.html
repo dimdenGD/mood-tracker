@@ -781,7 +781,6 @@
                     if(!values[date]) values[date] = [];
                     values[date].push(closest[0]);
                 }
-                console.log(Object.assign({}, values));
                 for(let i in values) {
                     values[i] = values[i].reduce((a, b) => a + b, 0) / values[i].length;
                     values[i] = +values[i].toFixed(5);
