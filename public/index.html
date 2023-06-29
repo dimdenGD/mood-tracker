@@ -766,11 +766,10 @@
                 const data = [];
                 for (let i = d.length - 1; i >= 0; i--) data.push(d[i]);
                 let values = {};
-                let startDate = data[data.length - 1][2].getTime();
+                let startDate = Math.floor(data[data.length - 1][2].getTime() / (1000 * 60 * 5)) * (1000 * 60 * 5);
                 let endDate = data[0][2].getTime();
-                let c = 0;
                 // iterate through every 5 minutes finding the closest mood
-                for(let d = startDate; d < endDate; d += 1000 * 60 * 5, c++) {
+                for(let d = startDate; d < endDate; d += 1000 * 60 * 5) {
                     let closest = data[0];
                     for(let mood of data) {
                         if(Math.abs(mood[2].getTime() - d) < Math.abs(closest[2].getTime() - d)) {
@@ -778,12 +777,14 @@
                         }
                     }
                     if(closest[2].getHours() >= 4 && closest[2].getHours() <= 9) continue;
-                    if(!values[new Date(d).toISOString().split("T")[0]]) values[new Date(d).toISOString().split("T")[0]] = 0;
-                    values[new Date(d).toISOString().split("T")[0]] += closest[0];
+                    let date = new Date(d).toISOString().split("T")[0];
+                    if(!values[date]) values[date] = [];
+                    values[date].push(closest[0]);
                 }
+                console.log(Object.assign({}, values));
                 for(let i in values) {
-                    values[i] /= c;
-                    values[i] = +values[i].toFixed(4) * 10;
+                    values[i] = values[i].reduce((a, b) => a + b, 0) / values[i].length;
+                    values[i] = +values[i].toFixed(5);
                 }
                 let min, max;
                 for(let i in values) {
