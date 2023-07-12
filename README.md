@@ -14,7 +14,7 @@ Webpage for tracking your mood (pleasantness / energy).
   
 ## Installation
 1. You need Express server running already or create a new one.  
-2. Install dependencies in folder where your server is: `npm install express better-sqlite3 body-parser`.
+2. Install dependencies in folder where your server is: `npm install express better-sqlite3 body-parser dotenv`.
 3. Create `.env` file if you dont have one yet with `DB_PATH=./example.db` and `ADMINPASS=something`.
 4. Include `server.js` in your server (for example `app.use(require("./mood/server.js"))`).
 5. Run/restart your server.
