@@ -19,7 +19,7 @@ Webpage for tracking your mood (pleasantness / energy).
 4. Include `server.js` in your server (for example `app.use(require("./mood/server.js"))`).
 5. Run/restart your server.
 6. Open `/mood` in browser, open Console with F12, and enter `localStorage.admin = "something"`, if you're on mobile you can copypaste this into searchbar: `javascript:localStorage.admin="something"`.
-7. Done!!!!!!
+7. Done!!!!!! Right click (or hold on phone) on dot to save mood.
   
 ## Mood file format
 Every mood is 6 bytes:
