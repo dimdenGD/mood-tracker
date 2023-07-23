@@ -374,37 +374,7 @@
             setInterval(get, 1000 * 60);
             function send() {
                 if(!localStorage.admin) return;
-                fetch("/services/mood/set", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        pleasantness: lastPleasantness,
-                        energy: lastEnergy,
-                        pass: localStorage.admin
-                    })
-                }).then(res => res.text()).then(res => {
-                    if(res !== 'added' && res !== 'edited') {
-                        return alert("Error: " + res);
-                    }
-                    if(offline || localStorage.toSend) {
-                        sync(false);
-                    }
-                    dot.style.filter = `hue-rotate(${res === 'added' ? '132' : '209'}deg)`;
-                    if(res === 'added') document.getElementById('date').innerText = new Date().toLocaleString();
-
-                    localStorage.lastCachedMood = JSON.stringify({
-                        pleasantness: lastPleasantness,
-                        energy: lastEnergy,
-                        timestamp: Date.now()
-                    });
-
-                    if(window.updateData) updateData(new Date(document.getElementById('after').value).getTime());
-                    setTimeout(() => {
-                        dot.style.filter = "";
-                    }, 1000);
-                }).catch(e => {
+                function err(e) {
                     let toSend = [];
                     try {
                         toSend = JSON.parse(localStorage.toSend);
@@ -430,7 +400,46 @@
                         dot.style.filter = "";
                     }, 1000);
                     localStorage.toSend = JSON.stringify(toSend);
-                })
+                }
+                const controller = new AbortController();
+                controller.signal.addEventListener("abort", () => {
+                    console.log("Aborted");
+                    err();
+                });
+                const timeoutId = setTimeout(() => controller.abort(), 1500);
+                fetch("/services/mood/set", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        pleasantness: lastPleasantness,
+                        energy: lastEnergy,
+                        pass: localStorage.admin
+                    }),
+                    signal: controller.signal
+                }).then(res => res.text()).then(res => {
+                    clearInterval(timeoutId);
+                    if(res !== 'added' && res !== 'edited') {
+                        return alert("Error: " + res);
+                    }
+                    if(offline || localStorage.toSend) {
+                        sync(false);
+                    }
+                    dot.style.filter = `hue-rotate(${res === 'added' ? '132' : '209'}deg)`;
+                    if(res === 'added') document.getElementById('date').innerText = new Date().toLocaleString();
+
+                    localStorage.lastCachedMood = JSON.stringify({
+                        pleasantness: lastPleasantness,
+                        energy: lastEnergy,
+                        timestamp: Date.now()
+                    });
+
+                    if(window.updateData) updateData(new Date(document.getElementById('after').value).getTime());
+                    setTimeout(() => {
+                        dot.style.filter = "";
+                    }, 1000);
+                }).catch(err);
             }
             function getMoodInfo(pleasantness, energy) {
                 if(energy >= 0.67) {
