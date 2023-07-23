@@ -1,0 +1,16 @@
+{
+  "name": "dimden_mood",
+  "version": "1.0.0",
+  "description": "dimden moodtracker",
+  "author": "dimden + H3",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "*",
+    "dotenv":"*",
+    "better-sqlite3":"*",
+    "body-parser":"*"
+  }
+}
