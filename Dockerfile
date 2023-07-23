@@ -1,8 +1,8 @@
 FROM node:current-alpine
 WORKDIR /usr/src/app
-COPY conf/package*.json .
+COPY docker/package*.json .
 RUN npm install
-COPY .. .
-COPY conf .
+COPY . .
+COPY docker .
 EXPOSE 8228
 CMD [ "node", "app.js" ]
