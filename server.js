@@ -40,7 +40,6 @@ app.get('/services/mood/file.mood', (req, res) => {
 		b.writeUInt32BE(time - mood_epoch, 2);
 
 		res.write(b);
-		if(i % 100 == 0 || i == moods.length - 1) res.flush();
 	}
 	res.end();
 });
