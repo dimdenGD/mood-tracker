@@ -1,0 +1,11 @@
+version: "3.3"
+services:
+   dimden_mood:
+    build: .
+    container_name: dimden_mood
+    user: X:X #insert UID and GID of target user here
+    ports:
+      - 8228:8228
+    restart: unless-stopped
+    volumes:
+      - /path/to/where/db/should/go:/mnt/db
