@@ -439,7 +439,10 @@
                     setTimeout(() => {
                         dot.style.filter = "";
                     }, 1000);
-                }).catch(err);
+                }).catch(e => {
+                    clearInterval(timeoutId);
+                    err();
+                });
             }
             function getMoodInfo(pleasantness, energy) {
                 if(energy >= 0.67) {
