@@ -20,15 +20,17 @@ Webpage for tracking your mood (pleasantness / energy).
 4. Include `server.js` in your server (for example `app.use(require("./mood/server.js"))`).
 5. Run/restart your server.
 ### As a standalone Docker container
-1. Install `docker compose` if it is not already installed
+1. Install `docker compose` if it is not already installed.
 2. Create a new user or pick an existing one to run the mood tracker. Pick a directory for the database which that user can read and write to.
-3. Edit `docker-compose.yml` to set the directory where the Database goes and the UID/GID for the user that can access it.
-4. Edit the `.env` file in the `conf` folder to change the default token/password
-5. Run `sudo docker compose up` to start the moodtracker, or with the `-d` flag added, to start it as a service.
+3. Edit `docker-compose.yaml` to set the directory where the Database goes and the UID/GID for the user that can access it.
+4. Edit the `.env` file in the `docker` folder to change the default token/password
+5. The default port is 8228 (CAT -> 228 on a phone dialpad). If you want to change that, edit `app.js`in the `docker` folder
+6. Run `sudo docker compose up` to start the moodtracker, or with the `-d` flag added, to start it as a service.
 
-## Useage
-1. Open `/mood/auth.html` in your browser and enter the token from the `.env`file to be able to edit the mood.
-2. Go to `/mood`
+## Usage
+1. Open `example.com:port/mood/auth.html` in your browser and enter the token from the `.env`file to be able to edit the mood.
+   You have to replace `example.com` and `port` with the actual address and port of your server of course.
+2. Go to `example.com:port/mood`
 3. Right click (or hold on phone) on dot to save mood.
   
 ## Mood file format
