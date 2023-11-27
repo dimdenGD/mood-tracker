@@ -62,11 +62,11 @@
                 border-radius: 3px;
                 -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
             }
-            .heatmap-dot {
+            .hd {
                 width: 12px;
                 height: 12px;
                 opacity: 0.45;
-
+                position: absolute;
             }
             text, #mood {
                 display: none;
@@ -200,7 +200,7 @@
                 <div>
                     <div id="mainchart-div">
                         <h2>Main chart</h2>
-                        Average: <input id="sma" type="number" value="1" min="1" style="width:25px">
+                        Average: <input id="sma" type="number" value="1" min="1" style="width:30px">
                         <br><br>
                         <div id="mainchart" class="chart"></div>
                     </div>
@@ -208,7 +208,8 @@
                     <br>
                     <div id="heatmap">
                         <h2>Heatmap</h2>
-                        <div id="heatmap-dots" style="margin-left:-512px"></div>
+                        <!-- <div id="heatmap-dots" style="margin-left:-512px"></div> -->
+                        <canvas id="heatmap-canvas" width="518" height="518" style="position:absolute"></canvas>
                         <img src="./moods.svg" width="518" height="518">
                     </div>
                     <br>
@@ -254,8 +255,8 @@
                 let y = (energy + 1) * 262;
                 y = 518 - y;
 
-                dot.style.marginLeft = x-12 + "px";
-                dot.style.marginTop = y-12 + "px";
+                dot.style.marginLeft = x-15 + "px";
+                dot.style.marginTop = y-10 + "px";
 
                 document.getElementById("pleasantness").innerText = pleasantness.toFixed(2);
                 document.getElementById("energy").innerText = energy.toFixed(2);
@@ -583,6 +584,10 @@
             const heatmapDots = document.getElementById("heatmap-dots");
             dateInput.value = new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString().split("T")[0];
             dateInput.addEventListener("change", e => {
+                let dateDiff = Date.now() - new Date(e.target.value).getTime();
+                if(smaElement.value == 1 && dateDiff > 1000 * 60 * 60 * 24 * 31 * 3) {
+                    smaElement.value = 40;
+                }
                 updateData(new Date(e.target.value).getTime());
             });
             const smaElement = document.getElementById("sma");
@@ -850,22 +855,20 @@
             }
 
             function setHeatmap(data) {
-                heatmapDots.innerHTML = "";
-                for(let mood of data) {
-                    let img = document.createElement("img");
-                    img.src = "./reddot.png";
-                    img.style.position = "absolute";
-                    
-                    let x = (mood[0] + 1) * 262;
-                    let y = (mood[1] + 1) * 262;
-                    y = 518 - y;
+                const canvas = document.getElementById("heatmap-canvas");
+                const ctx = canvas.getContext("2d");
+                ctx.clearRect(0, 0, 518, 518);
+                ctx.globalAlpha = data.length > 3000 ? 0.15 : data.length > 1000 ? 0.22 : data.length > 500 ? 0.3 : 0.5;
+                let img = document.createElement("img");
+                img.src = "./reddot.png";
+                img.onload = () => {
+                    for(let mood of data) {
+                        let x = (mood[0] + 1) * 262;
+                        let y = (mood[1] + 1) * 262;
+                        y = 518 - y;
 
-                    img.className = 'heatmap-dot';
-                    img.style.marginLeft = x-6 + "px";
-                    img.style.marginTop = y-6 + "px";
-                    img.title = mood[2].toLocaleString();
-
-                    heatmapDots.appendChild(img);
+                        ctx.drawImage(img, x-6, y-6, 12, 12);
+                    }
                 }
             }
 
