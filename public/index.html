@@ -83,7 +83,7 @@
                     display: block;
                 }
             }
-            @media screen and (max-width: 500px) {
+            @media screen and (max-width: 600px) {
                 .center {
                     margin-top: 120px;
                 }
@@ -194,7 +194,7 @@
             <details>
                 <summary>Analytics</summary>
                 <br>
-                Since: <input type="date" id="after" value="2023-05-04">
+                Since: <input type="date" id="after" value="2023-05-04"> <button id="all">All</button>
                 <br><br>
                 <div>
                     <div id="mainchart-div">
@@ -592,6 +592,14 @@
                     smaElement.value = 40;
                 }
                 updateData(new Date(e.target.value).getTime());
+            });
+            document.getElementById("all").addEventListener("click", e => {
+                dateInput.value = new Date(mood_epoch).toISOString().split("T")[0];
+                let dateDiff = Date.now() - new Date(dateInput.value).getTime();
+                if(smaElement.value == 1 && dateDiff > 1000 * 60 * 60 * 24 * 31 * 3) {
+                    smaElement.value = 40;
+                }
+                updateData(new Date(dateInput.value).getTime());
             });
             const smaElement = document.getElementById("sma");
             smaElement.addEventListener("change", e => {
