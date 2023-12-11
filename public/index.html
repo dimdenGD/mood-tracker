@@ -886,7 +886,7 @@
                 // Iterate through every 5 minutes finding the closest mood using binary search
                 for(let d = startDate; d < endDate; d += 1000 * 60 * 5) {
                     let closest = binarySearch(d);
-                    if(closest[2].getHours() >= 4 && closest[2].getHours() <= 9) continue;
+                    if(closest[1] < -0.8) continue; // most likely asleep
                     let date = new Date(d).toISOString().split("T")[0];
                     if(!values[date]) values[date] = [];
                     values[date].push(closest[0]);
@@ -981,7 +981,7 @@
                 // Iterate through every 5 minutes finding the closest mood using binary search
                 for(let d = startDate; d < endDate; d += 1000 * 60 * 5) {
                     let closest = binarySearch(d);
-                    if(closest[2].getHours() >= 4 && closest[2].getHours() <= 9) continue;
+                    if(closest[1] < -0.8) continue; // most likely asleep
                     let date = new Date(d).toISOString().split("T")[0];
                     if(!values[date]) values[date] = [];
                     values[date].push(closest[1]);
