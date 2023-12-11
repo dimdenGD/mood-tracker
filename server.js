@@ -76,7 +76,7 @@ app.post('/services/mood/setmultiple', bodyParser.json(), (req, res) => {
 	res.send("added");
 });
 
-app.use('/mood', express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "public")));
 
 console.log("Mood service started.");
 

@@ -83,6 +83,11 @@
                     display: block;
                 }
             }
+            @media screen and (max-width: 500px) {
+                .center {
+                    margin-top: 120px;
+                }
+            }
         </style>
     </head>
     <body>
@@ -90,7 +95,7 @@
         <img src="./moonclouds.webp" id="bg">
         <div class="center">
             <h1>Mood Tracker</h1>
-            <div>
+            <div id="stuff">
                 <span style="transform: rotate(-90deg);display: block;position: relative;right: 270px;top: 266px;">Low Energy <----------------------> High Energy</span>
                 <img src="./reddot.png" alt="reddot" id="dot" width="24" height="24" draggable="false">
                 <svg version="1.1" width="518" height="518" xmlns="http://www.w3.org/2000/svg" alt="moods" id="moods" draggable="false">
@@ -224,6 +229,10 @@
                         <div id="daily-average-pleasantness-div">
                             <h2>Daily average pleasantness</h2>
                             <div id="daily-average-pleasantness" class="chart" style="width:700px;height:175px"></div>
+                        </div>
+                        <div id="daily-average-energy-div">
+                            <h2>Daily average energy</h2>
+                            <div id="daily-average-energy" class="chart" style="width:700px;height:175px"></div>
                         </div>
                     </div>
                     <br><br><br><br><br><br>
@@ -891,7 +900,103 @@
                         left: 'center',
                         show: false,
                         inRange: {
-                            color: ['#ef5350', '#26a69a']
+                            color: ['red', '#ef5350', '#56a698', 'green'],
+                            symbolSize: [-1, 1]
+                        }
+                    },
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: function (params) {
+                            return params.value[0] + ': ' + params.value[1];
+                        }
+                    },
+                    calendar: {
+                        top: 40,
+                        left: 30,
+                        right: 30,
+                        cellSize: [16, 16],
+                        range: [new Date(startDate).toISOString().split("T")[0], new Date(endDate).toISOString().split("T")[0]],
+                        itemStyle: {
+                            borderWidth: 0.5
+                        },
+                        yearLabel: { show: false }
+                    },
+                    animation: false
+                });
+                el.style.width = Math.ceil(daysBetween / 7) * 16 + 60 + "px";
+                chart.resize({
+                    width: Math.ceil(daysBetween / 7) * 16 + 60,
+                    height: 175
+                });
+            }
+            function setDailyEnergyChart(d) {
+                let el = document.getElementById('daily-average-energy');
+                const chart = echarts.init(el);
+
+                // Sort the data array by time in ascending order
+                const data = d.sort((a, b) => a[2] - b[2]);
+                let values = {};
+                let startDate = Math.floor(data[0][2].getTime() / (1000 * 60 * 5)) * (1000 * 60 * 5);
+                let endDate = data[data.length - 1][2].getTime();
+
+                // Binary search function to find the closest mood
+                function binarySearch(time) {
+                    let start = 0;
+                    let end = data.length - 1;
+                    while (start <= end) {
+                        let mid = Math.floor((start + end) / 2);
+                        if (data[mid][2].getTime() === time) {
+                            return data[mid];
+                        } else if (data[mid][2].getTime() < time) {
+                            start = mid + 1;
+                        } else {
+                            end = mid - 1;
+                        }
+                    }
+                    // Ensure start and end are within the bounds of the data array
+                    start = Math.max(0, Math.min(data.length - 1, start));
+                    end = Math.max(0, Math.min(data.length - 1, end));
+                    // Return the closest mood
+                    return Math.abs(data[start][2].getTime() - time) < Math.abs(data[end][2].getTime() - time) ? data[start] : data[end];
+                }
+
+                // Iterate through every 5 minutes finding the closest mood using binary search
+                for(let d = startDate; d < endDate; d += 1000 * 60 * 5) {
+                    let closest = binarySearch(d);
+                    if(closest[2].getHours() >= 4 && closest[2].getHours() <= 9) continue;
+                    let date = new Date(d).toISOString().split("T")[0];
+                    if(!values[date]) values[date] = [];
+                    values[date].push(closest[1]);
+                }
+                for(let i in values) {
+                    values[i] = values[i].reduce((a, b) => a + b, 0) / values[i].length;
+                    values[i] = +values[i].toFixed(5);
+                }
+                let min, max;
+                for(let i in values) {
+                    if(!min || values[i] < min) min = values[i];
+                    if(!max || values[i] > max) max = values[i];
+                }
+                let m = Math.max(Math.abs(min), Math.abs(max));
+
+                let daysBetween = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+
+                chart.setOption({
+                    series: {
+                        type: 'heatmap',
+                        data: Object.entries(values),
+                        coordinateSystem: 'calendar'
+                    },
+                    visualMap: {
+                        min: -m,
+                        max: m,
+                        type: 'continuous',
+                        orient: 'horizontal',
+                        left: 'center',
+                        show: false,
+                        inRange: {
+                            color: ['blue', 'yellow'],
+                            symbolSize: [-1, 1]
                         }
                     },
                     tooltip: {
@@ -953,6 +1058,7 @@
                     setHourlyEnergyChart(moods);
                     setHourlyPleasantnessChart(moods);
                     setDailyPleasantnessChart(moods);
+                    setDailyEnergyChart(moods);
                 });
             }
             updateData(new Date(dateInput.value).getTime());

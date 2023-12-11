@@ -1,11 +1,10 @@
 const cacheName = 'mood-cache';
 const filesToCache = [
-    '/mood',
-    '/mood/',
-    '/mood/moonclouds.webp',
-    '/mood/reddot.png',
-    '/mood/echarts.min.js',
-    '/mood/moods.svg'
+    '/',
+    '/moonclouds.webp',
+    '/reddot.png',
+    '/echarts.min.js',
+    '/moods.svg'
 ];
 
 // the event handler for the activate event
