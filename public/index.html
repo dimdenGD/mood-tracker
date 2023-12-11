@@ -263,8 +263,18 @@
 
                 document.getElementById("pleasantness").innerText = pleasantness.toFixed(2);
                 document.getElementById("energy").innerText = energy.toFixed(2);
-                let [text, color] = getMoodInfo(pleasantness, energy);
+                let [text, color, emoji] = getMoodInfo(pleasantness, energy);
                 document.getElementById("mood").innerText = text;
+                let icon = document.getElementById("icon");
+                if(!icon) {
+                    icon = document.createElement("link");
+                    icon.rel = "icon";
+                    icon.id = "icon";
+                    icon.href = `./fbemoji/${emoji}.png`;
+                    document.head.appendChild(icon);
+                } else {
+                    icon.href = `./fbemoji/${emoji}.png`;
+                }
                 document.getElementById("mood").style.backgroundColor = "#" + color;
                 if(gray) dot.style.filter = "grayscale(0.4)";
                 else dot.style.filter = "";
@@ -451,90 +461,90 @@
             function getMoodInfo(pleasantness, energy) {
                 if(energy >= 0.67) {
                     if(pleasantness >= 0.67) {
-                        return ["Ecstatic", "ffde59"];
+                        return ["Ecstatic", "ffde59", "bigsmile"];
                     } else if(pleasantness >= 0.33) {
-                        return ["Festive", "febd59"];
+                        return ["Festive", "febd59", "bigsmile"];
                     } else if(pleasantness >= 0) {
-                        return ["Manic", "ff914c"];
+                        return ["Manic", "ff914c", "pacman"];
                     } else if(pleasantness >= -0.33) {
-                        return ["Shocked", "e64f22"];
+                        return ["Shocked", "e64f22", "scared"];
                     } else if(pleasantness >= -0.67) {
-                        return ["Angry", "d72121"];
+                        return ["Angry", "d72121", "anger"];
                     } else {
-                        return ["Enraged", "9b0b00"];
+                        return ["Enraged", "9b0b00", "anger"];
                     }
                 } else if(energy >= 0.33) {
                     if(pleasantness >= 0.67) {
-                        return ["Excited", "ffde59"];
+                        return ["Excited", "ffde59", "o"];
                     } else if(pleasantness >= 0.33) {
-                        return ["Motivated", "febd59"];
+                        return ["Motivated", "febd59", "fine"];
                     } else if(pleasantness >= 0) {
-                        return ["Energized", "ff914c"];
+                        return ["Energized", "ff914c", "fine"];
                     } else if(pleasantness >= -0.33) {
-                        return ["Restless", "e64f22"];
+                        return ["Restless", "e64f22", "confused"];
                     } else if(pleasantness >= -0.67) {
-                        return ["Stressed", "d72121"];
+                        return ["Stressed", "d72121", "sad"];
                     } else {
-                        return ["Fuming", "9b0b00"];
+                        return ["Fuming", "9b0b00", "wa"];
                     }
                 } else if(energy >= 0) {
                     if(pleasantness >= 0.67) {
-                        return ["Blissful", "ffde59"];
+                        return ["Blissful", "ffde59", "o"];
                     } else if(pleasantness >= 0.33) {
-                        return ["Cheerful", "febd59"];
+                        return ["Cheerful", "febd59", "smile"];
                     } else if(pleasantness >= 0) {
-                        return ["Pleasant", "ff914c"];
+                        return ["Pleasant", "ff914c", "fine"];
                     } else if(pleasantness >= -0.33) {
-                        return ["Uneasy", "e64f22"];
+                        return ["Uneasy", "e64f22", "confused"];
                     } else if(pleasantness >= -0.67) {
-                        return ["Worried", "d72121"];
+                        return ["Worried", "d72121", "cry"];
                     } else {
-                        return ["Anxious,", "9b0b00"];
+                        return ["Anxious,", "9b0b00", "cry"];
                     }
                 } else if(energy >= -0.33) {
                     if(pleasantness >= 0.67) {
-                        return ["Fulfilled", "6b7a41"];
+                        return ["Fulfilled", "6b7a41", "cat"];
                     } else if(pleasantness >= 0.33) {
-                        return ["Content", "a1ad7e"];
+                        return ["Content", "a1ad7e", "cute"];
                     } else if(pleasantness >= 0) {
-                        return ["At ease", "c3d098"];
+                        return ["At ease", "c3d098", "fine"];
                     } else if(pleasantness >= -0.33) {
-                        return ["Apathetic", "d1dae6"];
+                        return ["Apathetic", "d1dae6", "neutral"];
                     } else if(pleasantness >= -0.67) {
-                        return ["Down", "89b1cb"];
+                        return ["Down", "89b1cb", "sad"];
                     } else {
-                        return ["Anxious", "688ca9"];
+                        return ["Anxious", "688ca9", "cry"];
                     }
                 } else if(energy >= -0.67) {
                     if(pleasantness >= 0.67) {
-                        return ["Satisfied", "6b7a41"];
+                        return ["Satisfied", "6b7a41", "cat"];
                     } else if(pleasantness >= 0.33) {
-                        return ["Restful", "a1ad7e"];
+                        return ["Restful", "a1ad7e", "satisfied"];
                     } else if(pleasantness >= 0) {
-                        return ["Relaxed", "c3d098"];
+                        return ["Relaxed", "c3d098", "sus"];
                     } else if(pleasantness >= -0.33) {
-                        return ["Tired", "d1dae6"];
+                        return ["Tired", "d1dae6", "confused"];
                     } else if(pleasantness >= -0.67) {
-                        return ["Sad", "89b1cb"];
+                        return ["Sad", "89b1cb", "sad"];
                     } else {
-                        return ["Miserable", "688ca9"];
+                        return ["Miserable", "688ca9", "cry"];
                     }
                 } else {
                     if(pleasantness >= 0.67) {
-                        return ["Serene", "6b7a41"];
+                        return ["Serene", "6b7a41", "cat"];
                     } else if(pleasantness >= 0.33) {
-                        return ["Tranquil", "a1ad7e"];
+                        return ["Tranquil", "a1ad7e", "satisfied"];
                     } else if(pleasantness >= 0) {
-                        return ["Sleepy", "c3d098"];
+                        return ["Sleepy", "c3d098", "sus"];
                     } else if(pleasantness >= -0.33) {
-                        return ["Drained", "d1dae6"];
+                        return ["Drained", "d1dae6", "sus"];
                     } else if(pleasantness >= -0.67) {
-                        return ["Desolate", "89b1cb"];
+                        return ["Desolate", "89b1cb", "wa"];
                     } else {
-                        return ["Despair", "688ca9"];
+                        return ["Despair", "688ca9", "cry"];
                     }
                 }
-                return ["Unknown", "ffffff"];
+                return ["Unknown", "ffffff", "neutral"];
             }
 
             moods.addEventListener("click", update);

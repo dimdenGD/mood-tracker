@@ -25,7 +25,7 @@ self.addEventListener("fetch", function (e) {
 
         let url = new URL(e.request.url);
 
-        if (!filesToCache.includes(url.pathname)) {
+        if (!filesToCache.includes(url.pathname) && !url.pathname.includes('fbemoji/')) {
             return fetch(e.request);
         }
 
