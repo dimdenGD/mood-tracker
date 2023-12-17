@@ -17,6 +17,11 @@ db.exec(`
 	);
 `);
 
+app.use((req, res, next) => {
+	res.header("Access-Control-Allow-Origin", "*");
+	next();
+});
+
 app.get('/services/mood/get', (req, res) => {
 	let lastMood = db.prepare(`select * from moods order by timestamp desc limit 1`).get();
 	return res.json(lastMood);
