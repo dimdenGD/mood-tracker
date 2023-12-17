@@ -23,7 +23,6 @@
                 -moz-user-select: none;
                 -webkit-user-select: none;
                 -ms-user-select: none;
-                user-drag: none;
                 -webkit-user-drag: none;
             }
             #mood {
@@ -202,6 +201,13 @@
                         Average: <input id="sma" type="number" value="1" min="1" style="width:30px"> Use WMA: <input id="wma" type="checkbox" checked>
                         <br><br>
                         <div id="mainchart" class="chart"></div>
+                    </div>
+                    <div id="add-mood" hidden>
+                        <br>
+                        <input type="datetime-local" id="add-mood-date">
+                        <input type="number" id="add-mood-pleasantness" placeholder="Pleasantness" min="-1" max="1" value="0" step="0.01">
+                        <input type="number" id="add-mood-energy" placeholder="Energy" min="-1" max="1" value="0" step="0.01">
+                        <button id="add-mood-button">Add</button>
                     </div>
                     <br>
                     <br>
@@ -591,6 +597,33 @@
         </script>
         <script src="./echarts.min.js"></script>
         <script>
+            if(localStorage.admin) {
+                document.getElementById("add-mood").hidden = false;
+                document.getElementById("add-mood-button").addEventListener("click", e => {
+                    let date = new Date(document.getElementById("add-mood-date").value);
+                    let pleasantness = +document.getElementById("add-mood-pleasantness").value;
+                    let energy = +document.getElementById("add-mood-energy").value;
+                    if(isNaN(pleasantness) || isNaN(energy)) return alert("Invalid values");
+                    if(pleasantness < -1 || pleasantness > 1 || energy < -1 || energy > 1) return alert("Invalid values");
+                    if(!localStorage.admin) return alert("No admin password");
+                    fetch("/services/mood/setmultiple", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            moods: [{
+                                pleasantness,
+                                energy,
+                                timestamp: date.getTime()
+                            }],
+                            pass: localStorage.admin
+                        })
+                    }).then(res => res.text()).then(res => {
+                        alert(res);
+                    });
+                });
+            }
             let lastMoods = [];
             const mood_epoch = 1682726400 * 1000;
             const dateInput = document.getElementById("after");
@@ -709,6 +742,10 @@
                 mainchart.resize({
                     width: innerWidth * 0.9,
                     height: 400
+                });
+                mainchart.on('click', function (params) {
+                    let date = new Date(params.data[0]);
+                    document.getElementById("add-mood-date").value = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}T${date.getHours().toString().padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`;
                 });
             }
 
