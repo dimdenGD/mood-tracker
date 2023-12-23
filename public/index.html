@@ -606,6 +606,8 @@
                     if(isNaN(pleasantness) || isNaN(energy)) return alert("Invalid values");
                     if(pleasantness < -1 || pleasantness > 1 || energy < -1 || energy > 1) return alert("Invalid values");
                     if(!localStorage.admin) return alert("No admin password");
+                    if(!isFinite(date.getTime())) return alert("Invalid date");
+                    return;
                     fetch("/services/mood/setmultiple", {
                         method: "POST",
                         headers: {
