@@ -1,6 +1,6 @@
 require('dotenv').config()
 
-const express = require("express");
+const express = require("ultimate-express");
 const Database = require('better-sqlite3');
 const bodyParser = require('body-parser');
 const path = require('path');
@@ -26,6 +26,20 @@ app.get('/services/mood/get', (req, res) => {
 	let lastMood = db.prepare(`select * from moods order by timestamp desc limit 1`).get();
 	return res.json(lastMood);
 });
+
+app.post('/services/mood/remove_last', bodyParser.json(), (req, res) => {
+	let pass = req.body.pass;
+	if(pass !== process.env.ADMINPASS) return res.send("wrong pass");
+
+	let lastMood = db.prepare(`select * from moods order by timestamp desc limit 1`).get();
+	if(lastMood) {
+		db.prepare(`delete from moods where id = ?`).run(lastMood.id);
+		res.send("removed");
+	} else {
+		res.send("no mood");
+	}
+});
+
 const mood_epoch = 1682726400; // Math.round(new Date("2023-04-29").getTime() / 1000)
 app.get('/services/mood/file.mood', (req, res) => {
 	let after = +req.query.after || 0;
@@ -48,6 +62,16 @@ app.get('/services/mood/file.mood', (req, res) => {
 	}
 	res.end();
 });
+
+app.get('/services/mood/get_multiple', (req, res) => {
+	let from = +req.query.from ?? 0;
+	let to = +req.query.to ?? Date.now();
+	if(!isFinite(from) || !isFinite(to)) return res.send("invalid time");
+	let moods = db.prepare(`select * from moods where timestamp between ? and ? order by timestamp desc`).all(from, to);
+
+	return res.json(moods);
+})
+
 app.post('/services/mood/set', bodyParser.json(), (req, res) => {
 	let pass = req.body.pass;
 	if(pass !== process.env.ADMINPASS) return res.send("wrong pass");
